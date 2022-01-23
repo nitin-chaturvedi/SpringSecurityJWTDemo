@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
-@EnableSwagger2
+//@EnableSwagger2 Configured with seperate for more detailed config handling
 public class SpringSecurityJwtDemoApplication {
 
 	public static void main(String[] args) {
