@@ -22,7 +22,7 @@ public class MyUserDetailsService implements UserDetailsService {
 
     //In real use case fetch entity from DB and create a MyUserDetails class which implements UserDetails
     //return the object of MyUserDetails class and use the overridden methods to get rest of the details.
-    Optional<User> user =userRepository.findByUsername();
+    Optional<User> user =userRepository.findByUsername(userName);
     user.orElseThrow(() -> new UsernameNotFoundException("Not found :: "+ userName));
     return user.map(MyUserDetails::new).get();
 
