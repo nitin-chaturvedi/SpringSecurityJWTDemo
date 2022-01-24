@@ -31,7 +31,7 @@ public class HelloController {
 
   @RequestMapping("/hello")
   public String hello(){
-    return "Hello guys";
+    return "Hello guys, JWT Auth is working.";
   }
 
   @PostMapping(value = "/authenticate")

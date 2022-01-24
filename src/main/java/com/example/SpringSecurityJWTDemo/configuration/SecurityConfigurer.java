@@ -32,7 +32,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
   protected void configure(HttpSecurity http) throws Exception {
     http.csrf().disable()
       .authorizeRequests()
-      .antMatchers("/authenticate",
+      .antMatchers(
         "/swagger-ui.html","/swagger-resources/**",
         "/webjars/springfox-swagger-ui/**","/v2/api-docs/**").permitAll()
       .anyRequest().authenticated()
@@ -46,7 +46,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
   @Override
   public void configure(WebSecurity web) throws Exception {
     //
-    web.ignoring().antMatchers("/authenticate");
+    web.ignoring().antMatchers("/authenticate","/h2-console/**");
   }
 
   @Bean
