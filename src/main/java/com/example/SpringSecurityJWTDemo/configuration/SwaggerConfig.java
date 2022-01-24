@@ -1,5 +1,6 @@
 package com.example.SpringSecurityJWTDemo.configuration;
 
+import static springfox.documentation.builders.PathSelectors.regex;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -36,7 +37,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
       // can be configured to point only to a package or a type of API Paths
       .select()
       .apis(RequestHandlerSelectors.basePackage("com.example.SpringSecurityJWTDemo"))
-      .paths(PathSelectors.regex("/.*"))
+      .paths(regex("/.*"))
       .build()
       ;
   }
@@ -59,7 +60,10 @@ public class SwaggerConfig implements WebMvcConfigurer {
   }
 
   private SecurityContext securityContext() {
-    return SecurityContext.builder().securityReferences(defaultAuth()).build();
+    return SecurityContext.builder().securityReferences(defaultAuth())
+      //enable only for certain paths
+      .forPaths(regex("/hello/*"))
+      .build();
   }
 
   private List<SecurityReference> defaultAuth() {

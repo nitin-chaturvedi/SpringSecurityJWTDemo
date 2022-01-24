@@ -1,10 +1,12 @@
 package com.example.SpringSecurityJWTDemo.models;
 
-import lombok.Getter;
+import lombok.Builder;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter @Setter @NoArgsConstructor
+@Data
+@NoArgsConstructor
+@Builder
 public class AuthenticationRequest {
 
   private String username;
