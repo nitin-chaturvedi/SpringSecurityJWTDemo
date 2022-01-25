@@ -1,62 +1,66 @@
 package com.example.SpringSecurityJWTDemo.controller;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import com.example.SpringSecurityJWTDemo.models.AuthenticationRequest;
-import com.example.SpringSecurityJWTDemo.models.MyUserDetails;
-import com.example.SpringSecurityJWTDemo.service.MyUserDetailsService;
-import com.example.SpringSecurityJWTDemo.util.JwtUtil;
+import com.example.SpringSecurityJWTDemo.models.AuthenticationResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import java.util.Collection;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
+import java.util.Arrays;
 
-@WebMvcTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class HelloControllerAcceptanceTest {
 
-  @Autowired
-  MockMvc mockMvc;
 
-  @MockBean
-  private MyUserDetailsService myUserDetailService;
-  @MockBean
-  JwtUtil jwtUtil;
+  @LocalServerPort
+  int serverPort;
 
-  @MockBean
-  AuthenticationManager authenticationManager;
+  private RestTemplate restTemplate;
+  private String baseUrl;
 
-  @Test
-  public void unauthorizedAccess() throws Exception {
-    mockMvc.perform(get("/hello"))
-      .andExpect(status().is(403));
-    System.out.println("finished");
+  @BeforeEach
+  private void setUp(){
+    restTemplate = new RestTemplate();
+    baseUrl = "http://localhost:"+serverPort;
   }
 
   @Test
-  public void testCreateAuthToken() throws Exception {
-    MyUserDetails ud = new MyUserDetails();
-    ud.setUsername("string");
-    when(myUserDetailService.loadUserByUsername(anyString())).thenReturn(ud);
-    mockMvc.perform(post("/authenticate").contentType(MediaType.APPLICATION_JSON)
-        .content(
-      new ObjectMapper().writeValueAsString(
-        AuthenticationRequest.builder().username("string").password("string").build())
-      ))
-      .andExpect(status().isOk());
+  public void testHelloApi(){
+    int status=0;
+    try {
+      restTemplate.getForEntity(baseUrl+"/hello",String.class);
+    } catch (Exception e){
+      status= ((HttpClientErrorException)e).getStatusCode().value();
+    }
+    assertEquals(403,status);
   }
 
+  @Test
+  public void testAuthenticateApi() throws JsonProcessingException {
+    HttpHeaders headers = new HttpHeaders();
+    headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+    headers.add("user-agent", "Application");
+
+    System.out.println(new ObjectMapper().writeValueAsString(
+      AuthenticationRequest.builder().username("string").password("string").build()));
+
+    ResponseEntity<AuthenticationResponse> responseEntity = restTemplate.postForObject(baseUrl+"/authenticate",
+        new HttpEntity<String>(
+          new ObjectMapper().writeValueAsString(
+            AuthenticationRequest.builder().username("string").password("string").build()),
+          headers
+        )
+        ,ResponseEntity.class);
+    assertEquals(200,responseEntity.getStatusCodeValue());
+
+  }
 }

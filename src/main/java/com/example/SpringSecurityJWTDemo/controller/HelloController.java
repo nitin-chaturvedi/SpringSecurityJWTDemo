@@ -30,7 +30,7 @@ public class HelloController {
   Logger logger = LoggerFactory.getLogger(HelloController.class);
 
   @RequestMapping("/hello")
-  public String hello(){
+  public String hello() {
     return "Hello guys, JWT Auth is working.";
   }
 
