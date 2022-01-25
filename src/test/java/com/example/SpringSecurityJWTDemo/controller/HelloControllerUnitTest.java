@@ -2,6 +2,7 @@ package com.example.SpringSecurityJWTDemo.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import com.example.SpringSecurityJWTDemo.models.AuthenticationRequest;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;

@@ -1,10 +1,12 @@
 package com.example.SpringSecurityJWTDemo.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import com.example.SpringSecurityJWTDemo.models.AuthenticationRequest;
 import com.example.SpringSecurityJWTDemo.models.AuthenticationResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,7 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
-import java.util.Arrays;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class HelloControllerAcceptanceTest {
@@ -28,20 +29,20 @@ class HelloControllerAcceptanceTest {
   private String baseUrl;
 
   @BeforeEach
-  private void setUp(){
+  private void setUp() {
     restTemplate = new RestTemplate();
-    baseUrl = "http://localhost:"+serverPort;
+    baseUrl = "http://localhost:" + serverPort;
   }
 
   @Test
-  public void testHelloApi(){
-    int status=0;
+  public void testHelloApi() {
+    int status = 0;
     try {
-      restTemplate.getForEntity(baseUrl+"/hello",String.class);
-    } catch (Exception e){
-      status= ((HttpClientErrorException)e).getStatusCode().value();
+      restTemplate.getForEntity(baseUrl + "/hello", String.class);
+    } catch (Exception e) {
+      status = ((HttpClientErrorException) e).getStatusCode().value();
     }
-    assertEquals(403,status);
+    assertEquals(403, status);
   }
 
   @Test
@@ -50,17 +51,15 @@ class HelloControllerAcceptanceTest {
     headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
     headers.add("user-agent", "Application");
 
-    System.out.println(new ObjectMapper().writeValueAsString(
-      AuthenticationRequest.builder().username("string").password("string").build()));
-
-    ResponseEntity<AuthenticationResponse> responseEntity = restTemplate.postForObject(baseUrl+"/authenticate",
+    ResponseEntity<AuthenticationResponse> responseEntity = restTemplate.postForObject(
+        baseUrl + "/authenticate",
         new HttpEntity<String>(
           new ObjectMapper().writeValueAsString(
             AuthenticationRequest.builder().username("string").password("string").build()),
           headers
-        )
-        ,ResponseEntity.class);
-    assertEquals(200,responseEntity.getStatusCodeValue());
+        ),
+        ResponseEntity.class);
+    assertEquals(200, responseEntity.getStatusCodeValue());
 
   }
 }

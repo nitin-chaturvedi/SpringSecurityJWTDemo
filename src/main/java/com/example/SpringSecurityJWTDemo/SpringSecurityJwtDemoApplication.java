@@ -8,8 +8,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 //@EnableSwagger2 Configured with seperate for more detailed config handling
 public class SpringSecurityJwtDemoApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(SpringSecurityJwtDemoApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(SpringSecurityJwtDemoApplication.class, args);
+  }
 
 }

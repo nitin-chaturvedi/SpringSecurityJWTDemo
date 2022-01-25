@@ -33,8 +33,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     http.csrf().disable()
       .authorizeRequests()
       .antMatchers(
-        "/swagger-ui.html","/swagger-resources/**",
-        "/webjars/springfox-swagger-ui/**","/v2/api-docs/**").permitAll()
+        "/swagger-ui.html", "/swagger-resources/**",
+        "/webjars/springfox-swagger-ui/**", "/v2/api-docs/**").permitAll()
       .anyRequest().authenticated()
       .and().sessionManagement()
       .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
@@ -46,11 +46,11 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
   @Override
   public void configure(WebSecurity web) throws Exception {
     //
-    web.ignoring().antMatchers("/authenticate","/h2-console/**");
+    web.ignoring().antMatchers("/authenticate", "/h2-console/**");
   }
 
   @Bean
-  public PasswordEncoder passwordEncoder(){
+  public PasswordEncoder passwordEncoder() {
     return NoOpPasswordEncoder.getInstance();
   }
 

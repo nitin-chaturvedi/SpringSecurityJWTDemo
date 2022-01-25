@@ -5,6 +5,7 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.example.SpringSecurityJWTDemo.models.AuthenticationRequest;
 import com.example.SpringSecurityJWTDemo.models.MyUserDetails;
 import com.example.SpringSecurityJWTDemo.service.MyUserDetailsService;
@@ -35,7 +36,7 @@ class HelloControllerIntegrationTest {
   @Test
   public void unauthorizedAccess() throws Exception {
     mockMvc.perform(get("/hello"))
-      .andExpect(status().is(403));
+        .andExpect(status().is(403));
     System.out.println("finished");
   }
 
@@ -46,10 +47,10 @@ class HelloControllerIntegrationTest {
     when(myUserDetailService.loadUserByUsername(anyString())).thenReturn(ud);
     mockMvc.perform(post("/authenticate").contentType(MediaType.APPLICATION_JSON)
         .content(
-      new ObjectMapper().writeValueAsString(
-        AuthenticationRequest.builder().username("string").password("string").build())
-      ))
-      .andExpect(status().isOk());
+          new ObjectMapper().writeValueAsString(
+            AuthenticationRequest.builder().username("string").password("string").build())
+        ))
+        .andExpect(status().isOk());
   }
 
 }

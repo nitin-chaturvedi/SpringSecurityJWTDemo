@@ -36,20 +36,20 @@ public class HelloController {
 
   @PostMapping(value = "/authenticate")
   public ResponseEntity<AuthenticationResponse> createAuthToken(
-    @RequestBody AuthenticationRequest authReq
-    ) throws Exception{
-  try {
-    logger.info("Started authentication : -");
-    authenticationManager.authenticate(
-      new UsernamePasswordAuthenticationToken(authReq.getUsername(), authReq.getPassword())
-    );
-  } catch(BadCredentialsException e) {
-    logger.error("Authentication failed : -");
-    throw new Exception("Incorrect username or password",e);
-  }
-  final UserDetails userDetail = userDetailService.loadUserByUsername(authReq.getUsername());
-  final String jwt = jwtUtil.generateToken(userDetail);
-  return ResponseEntity.ok(new AuthenticationResponse(jwt));
+      @RequestBody AuthenticationRequest authReq
+  ) throws Exception {
+    try {
+      logger.info("Started authentication : -");
+      authenticationManager.authenticate(
+        new UsernamePasswordAuthenticationToken(authReq.getUsername(), authReq.getPassword())
+      );
+    } catch (BadCredentialsException e) {
+      logger.error("Authentication failed : -");
+      throw new Exception("Incorrect username or password", e);
+    }
+    final UserDetails userDetail = userDetailService.loadUserByUsername(authReq.getUsername());
+    final String jwt = jwtUtil.generateToken(userDetail);
+    return ResponseEntity.ok(new AuthenticationResponse(jwt));
   }
 
 }
